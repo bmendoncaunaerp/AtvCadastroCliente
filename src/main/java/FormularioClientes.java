@@ -63,8 +63,7 @@ public class FormularioClientes extends JFrame {
             SessionFactory factory = new Configuration().configure().buildSessionFactory();
             Session session = factory.openSession();
 
-            Cliente cliente1 = new Cliente();
-            cliente1.setNome("Maria");
+            Cliente cliente1 = new Cliente(nome, email);
 
             Transaction tx = session.beginTransaction();
             session.save(cliente1);
