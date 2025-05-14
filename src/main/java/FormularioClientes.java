@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormularioClientes extends JFrame {
+    ClienteDAO clienteDatabase = new ClienteSQLServer();
+
     private JTextField txtNome, txtEmail;
     private JTextArea areaClientes;
     private List<Cliente> clientes = new ArrayList<>();
@@ -60,16 +62,7 @@ public class FormularioClientes extends JFrame {
             atualizarLista();
             limparCampos();
 
-            SessionFactory factory = new Configuration().configure().buildSessionFactory();
-            Session session = factory.openSession();
-
-            Cliente cliente1 = new Cliente(nome, email);
-
-            Transaction tx = session.beginTransaction();
-            session.save(cliente1);
-            tx.commit();
-
-            session.close();
+            clienteDatabase.salvar(cliente);
 
         } catch (IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
