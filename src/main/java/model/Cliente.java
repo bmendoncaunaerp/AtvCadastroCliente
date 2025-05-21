@@ -1,8 +1,10 @@
+package model;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cliente")
-class Cliente {
+public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

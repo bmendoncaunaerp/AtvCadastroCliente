@@ -1,19 +1,17 @@
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+package view;
+
+import model.Cliente;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FormularioClientes extends JFrame {
-    ClienteDAO clienteDatabase = new ClienteSQLServer();
-
     private JTextField txtNome, txtEmail;
     private JTextArea areaClientes;
+    JButton btnSalvar;
     private List<Cliente> clientes = new ArrayList<>();
 
     public FormularioClientes() {
@@ -31,7 +29,7 @@ public class FormularioClientes extends JFrame {
         txtEmail = new JTextField();
         painelForm.add(txtEmail);
 
-        JButton btnSalvar = new JButton("Salvar");
+        btnSalvar = new JButton("Salvar");
         painelForm.add(btnSalvar);
 
         add(painelForm, BorderLayout.NORTH);
@@ -41,34 +39,11 @@ public class FormularioClientes extends JFrame {
         areaClientes.setEditable(false);
         add(new JScrollPane(areaClientes), BorderLayout.CENTER);
 
-        // Ação do botão
-        btnSalvar.addActionListener(e -> salvarCliente());
-
         setVisible(true);
     }
 
-    private void salvarCliente() {
-        try {
-            String nome = txtNome.getText().trim();
-            String email = txtEmail.getText().trim();
-
-            if (nome.isEmpty() || email.isEmpty()) {
-                throw new IllegalArgumentException("Preencha todos os campos.");
-            }
-
-            Cliente cliente = new Cliente(nome, email);
-            clientes.add(cliente);
-
-            atualizarLista();
-            limparCampos();
-
-            clienteDatabase.salvar(cliente);
-
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Aviso", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+    public void setBtnSalvarListener(ActionListener l){
+        btnSalvar.addActionListener(l);
     }
 
     private void atualizarLista() {
@@ -83,6 +58,14 @@ public class FormularioClientes extends JFrame {
         txtNome.setText("");
         txtEmail.setText("");
         txtNome.requestFocus();
+    }
+
+    public void showDialog(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void updatePainel() {
+        // TODO atualizar dados da tela
     }
 
     public static void main(String[] args) {
