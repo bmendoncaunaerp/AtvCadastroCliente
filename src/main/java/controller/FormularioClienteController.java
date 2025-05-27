@@ -1,18 +1,26 @@
 package controller;
 
 import model.Cliente;
-import model.ClienteSQLite;
+import model.ClienteDAO;
+import model.ClienteDAOImpl;
 import view.FormularioClientes;
 
-import javax.swing.*;
+import java.util.List;
 
 public class FormularioClienteController {
 
     FormularioClientes view = new FormularioClientes();
-    ClienteDAO clienteDAO = new ClienteSQLite();
+    ClienteDAO clienteDAO = new ClienteDAOImpl();
 
-    FormularioClienteController() {
-        view.setBtnSalvarListener(e -> onCadastroClicked());
+    public FormularioClienteController() {
+        view.setBtnSalvarListener(e -> {
+            String nome = view.getNome();
+            String email = view.getEmail();
+            onCadastroClicked(nome, email);
+        });
+
+        List<Cliente> clientes = clienteDAO.obterClientes();
+        view.mostrarClientes(clientes);
     }
 
     void onCadastroClicked(String nome, String email) {
@@ -24,7 +32,9 @@ public class FormularioClienteController {
             Cliente cliente = new Cliente(nome, email);
 
             clienteDAO.salvar(cliente);
-            view.updatePainel();
+            List<Cliente> clientes = clienteDAO.obterClientes();
+            view.mostrarClientes(clientes);
+            view.limparCampos();
 
         } catch (IllegalArgumentException ex) {
             view.showDialog(ex.getMessage());
@@ -32,5 +42,4 @@ public class FormularioClienteController {
             view.showDialog(ex.getMessage());
         }
     }
-
 }

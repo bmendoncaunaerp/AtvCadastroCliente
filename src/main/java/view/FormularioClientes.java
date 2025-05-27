@@ -5,14 +5,12 @@ import model.Cliente;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FormularioClientes extends JFrame {
     private JTextField txtNome, txtEmail;
     private JTextArea areaClientes;
-    JButton btnSalvar;
-    private List<Cliente> clientes = new ArrayList<>();
+    private JButton btnSalvar;
 
     public FormularioClientes() {
         setTitle("Cadastro de Clientes");
@@ -20,7 +18,6 @@ public class FormularioClientes extends JFrame {
         setSize(400, 300);
         setLayout(new BorderLayout());
 
-        // Painel do formulário
         JPanel painelForm = new JPanel(new GridLayout(3, 2));
         painelForm.add(new JLabel("Nome:"));
         txtNome = new JTextField();
@@ -34,7 +31,6 @@ public class FormularioClientes extends JFrame {
 
         add(painelForm, BorderLayout.NORTH);
 
-        // Área para exibir clientes
         areaClientes = new JTextArea();
         areaClientes.setEditable(false);
         add(new JScrollPane(areaClientes), BorderLayout.CENTER);
@@ -42,11 +38,19 @@ public class FormularioClientes extends JFrame {
         setVisible(true);
     }
 
-    public void setBtnSalvarListener(ActionListener l){
+    public void setBtnSalvarListener(ActionListener l) {
         btnSalvar.addActionListener(l);
     }
 
-    private void atualizarLista() {
+    public String getNome() {
+        return txtNome.getText();
+    }
+
+    public String getEmail() {
+        return txtEmail.getText();
+    }
+
+    public void mostrarClientes(List<Cliente> clientes) {
         StringBuilder sb = new StringBuilder();
         for (Cliente c : clientes) {
             sb.append(c).append("\n");
@@ -54,7 +58,7 @@ public class FormularioClientes extends JFrame {
         areaClientes.setText(sb.toString());
     }
 
-    private void limparCampos() {
+    public void limparCampos() {
         txtNome.setText("");
         txtEmail.setText("");
         txtNome.requestFocus();
@@ -62,13 +66,5 @@ public class FormularioClientes extends JFrame {
 
     public void showDialog(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
-    }
-
-    public void updatePainel() {
-        // TODO atualizar dados da tela
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(FormularioClientes::new);
     }
 }
